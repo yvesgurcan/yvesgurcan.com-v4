@@ -34,6 +34,7 @@ h1 :nth-child(3) {
   padding: 20px;
   font-size: 50px;
   font-family: Permanent Marker;
+  letter-spacing: 3px;
 }
 
 h2 {
