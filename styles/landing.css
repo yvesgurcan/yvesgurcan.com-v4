@@ -32,9 +32,21 @@ h1 :nth-child(3) {
   margin-left: -20px;
   margin-right: -20px;
   padding: 20px;
-  font-size: 48px;
+  font-size: 55px;
   font-family: Permanent Marker;
   letter-spacing: 3px;
+}
+
+@media (max-width: 450px) {
+  h1 :nth-child(3) {
+    font-size: 38px;
+  }
+}
+
+@media (max-width: 250px) {
+  h1 :nth-child(3) {
+    font-size: 30px;
+  }
 }
 
 h2 {
