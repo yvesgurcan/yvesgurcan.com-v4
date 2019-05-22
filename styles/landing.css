@@ -32,9 +32,9 @@ h1 :nth-child(3) {
   margin-left: -20px;
   margin-right: -20px;
   padding: 20px;
-  font-size: 50px;
+  font-size: 48px;
   font-family: Permanent Marker;
-  letter-spacing: 2px;
+  letter-spacing: 3px;
 }
 
 h2 {
