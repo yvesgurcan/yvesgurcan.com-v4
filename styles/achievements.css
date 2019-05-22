@@ -5,6 +5,12 @@
   margin: auto;
 }
 
+h3 {
+  padding-top: 80px;
+  padding-bottom: 10px;
+  font-size: 28px;
+}
+
 .achievement {
   width: 96px;
   height: 96px;
