@@ -1,0 +1,68 @@
+#latest-achievements {
+  max-width: 540px;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+}
+
+.achievement {
+  width: 96px;
+  height: 96px;
+  background: black;
+  margin: 3px;
+  cursor: pointer;
+  color: white;
+  border: 3px solid white;
+}
+
+.achievement code {
+  color: gold;
+  /* Firefox only */
+  word-wrap: anywhere;
+  /* Chrome only */
+  word-break: break-all;
+}
+
+.achievement-info {
+  border: 3px solid black;
+  position: absolute;
+  background: darkgrey;
+  padding: 5px;
+  margin-top: 4px;
+  margin-left: -3px;
+  line-height: 90%;
+  max-width: 518px;
+  min-height: 86px;
+  animation: reveal 0.5s;
+  background: rgb(110, 110, 110);
+  border: 3px solid white;
+  color: white;
+  line-height: 130%;
+}
+
+.achievement-info :nth-child(1) {
+  font-weight: bold;
+}
+
+.achievement-info :nth-child(3) {
+  padding-top: 10px;
+}
+
+.achievement-white {
+  background: white;
+  color: black;
+}
+
+.achievement-grey {
+  background: grey;
+  color: black;
+}
+
+.achievement-beige {
+  background: rgb(255, 255, 200);
+  color: black;
+}
+
+.hidden {
+  display: none;
+}
