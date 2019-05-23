@@ -6,18 +6,6 @@ const disableTouch = () => {
   touchEnabled = false;
 };
 
-const closeAllAchievements = () => {
-  disableTouch();
-  achievements.forEach(achievement => {
-    if (achievement.index !== activeElement) {
-      const achievementInfoElem = document.getElementById(
-        `yg-achievement-info${achievement.index}`
-      );
-      achievementInfoElem.classList.add("yg-hidden");
-    }
-  });
-};
-
 (function() {
   const ACHIEVEMENT_LIST_ELEMENT_ID = "achievements";
   const ACHIEVEMENT_CLASS = "achievement";
@@ -41,8 +29,10 @@ const closeAllAchievements = () => {
       achievementImage.onmouseout = () => achievement.onMouseOut();
       achievementImage.onclick = () => achievement.toggleInfo();
 
-      if (achievement.image) {
-        achievementImage.src = `assets/achievements/${achievement.image}.png`;
+      if (achievement.data.image) {
+        achievementImage.src = `assets/achievements/${
+          achievement.data.image
+        }.png`;
       } else {
         achievementImage.src = `assets/achievements/mario_box.png`;
       }
@@ -55,9 +45,9 @@ const closeAllAchievements = () => {
       achievementName.innerHTML = achievement.data.name;
       achievementDetails.append(achievementName);
 
-      const achievemenDescription = document.createElement("div");
-      achievemenDescription.innerHTML = achievement.data.description;
-      achievementDetails.append(achievemenDescription);
+      const achievementDescription = document.createElement("div");
+      achievementDescription.innerHTML = achievement.data.description;
+      achievementDetails.append(achievementDescription);
 
       const achievementTags = document.createElement("div");
       achievementTags.innerHTML = `Tags: ${achievement.data.tags}`;
