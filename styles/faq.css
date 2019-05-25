@@ -1,25 +1,24 @@
 #faq {
-  padding-top: 100px;
-  padding-bottom: 100px;
-  max-width: 800px;
-  display: flex;
-  flex-direction: column;
-  margin: auto;
+    padding-bottom: 100px;
+    max-width: 940px;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
 }
 
 #faq-inner {
-  background: grey;
-  padding: 40px;
+    background: grey;
+    padding: 60px;
 }
 
 h4 {
-  text-align: center;
-  font-size: 28px;
-  padding-bottom: 30px;
+    text-align: center;
+    font-size: 28px;
+    padding-bottom: 30px;
 }
 
 h5 {
-  font-size: 22px;
-  padding-top: 20px;
-  padding-bottom: 2px;
+    font-size: 22px;
+    padding-top: 20px;
+    padding-bottom: 4px;
 }

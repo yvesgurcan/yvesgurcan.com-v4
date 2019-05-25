@@ -1,16 +1,16 @@
-#social {
+#activity {
     max-width: 960px;
     display: flex;
     flex-direction: column;
     margin: auto;
 }
 
-#social h3 {
+#activity h3 {
     padding-left: 10px;
 }
 
 @media (max-width: 999px) {
-    #social h3 {
+    #activity h3 {
         text-align: center;
     }
 }
