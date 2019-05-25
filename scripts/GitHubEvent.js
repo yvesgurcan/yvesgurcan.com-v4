@@ -17,8 +17,8 @@ class GitHubEvent {
     }
 
     getName() {
-        const { action, ref_type, pages, commits } = this.data.payload;
-        switch (this.data.type) {
+        const { type, action, ref_type, pages, commits } = this.data.payload;
+        switch (type) {
             default: {
                 return '';
             }
