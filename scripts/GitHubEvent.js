@@ -17,6 +17,7 @@ class GitHubEvent {
     }
 
     getName() {
+        const { action, ref_type, pages, commits } = this.data.payload;
         switch (this.data.type) {
             default: {
                 return '';
@@ -25,70 +26,62 @@ class GitHubEvent {
                 return 'left a comment on a commit';
             }
             case 'CreateEvent': {
-                return `created a ${this.data.payload.ref_type}`;
+                return `created a ${ref_type}`;
             }
             case 'DeleteEvent': {
-                return `deleted a ${this.data.payload.ref_type}`;
+                return `deleted a ${ref_type}`;
             }
             case 'ForkEvent': {
                 return 'forked a repository';
             }
             case 'GollumEvent': {
-                return `${this.data.payload.pages[0].action} a wiki page`;
+                return `${pages[0].action} a wiki page`;
             }
             case 'IssueCommentEvent': {
                 // 'edited' and 'deleted' are not public
                 return 'commented on an issue';
             }
             case 'IssuesEvent': {
-                return `${this.data.payload.action} an issue`;
+                return `${action} an issue`;
             }
             // not tested below
             case 'LabelEvent': {
-                return `${this.data.payload.action} an issue label`;
+                return `${action} an issue label`;
             }
             case 'MilestoneEvent': {
-                return `${this.data.payload.action} a milestone`;
-            }
-            case 'PageBuildEvent': {
-                return 'GitHub Pages built started...';
+                return `${action} a milestone`;
             }
             case 'ProjectCardEvent': {
-                return `${this.data.payload.action} a project card`;
+                return `${action} a project card`;
             }
             case 'ProjectColumnEvent': {
-                return `${this.data.payload.action} a project column`;
+                return `${action} a project column`;
             }
             case 'PullRequestEvent': {
-                // TODO: there are some actions that do not work very well like that
-                return `${this.data.payload.action} a pull request`;
+                // TODO: there are some actions whose wording does not work very well like that
+                return `${action} a pull request`;
             }
             case 'PullRequestReviewEvent': {
-                return `${this.data.payload.action} a review on a pull request`;
+                return `${action} a review on a pull request`;
             }
             case 'PullRequestReviewCommentEvent': {
-                return `${
-                    this.data.payload.action
-                } a comment on a pull request`;
+                return `${action} a comment on a pull request`;
             }
             case 'PushEvent': {
-                const commitCount = this.data.payload.commits.length;
+                const commitCount = commits.length;
                 return `pushed ${commitCount} commit${
                     commitCount > 1 ? 's' : ''
                 }`;
             }
             case 'RepositoryEvent': {
-                return `${this.data.payload.action} a repository`;
-            }
-            case 'StarEvent': {
-                const action =
-                    this.data.payload.action === 'created'
-                        ? 'starred'
-                        : 'unstarred';
                 return `${action} a repository`;
             }
+            case 'StarEvent': {
+                const starAction = action === 'created' ? 'starred' : 'unstarred';
+                return `${starAction} a repository`;
+            }
             case 'WatchEvent': {
-                return `${this.data.payload.action} watching a repository`;
+                return `${action} watching a repository`;
             }
         }
     }
