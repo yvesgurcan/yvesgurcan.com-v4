@@ -23,6 +23,7 @@ const URLS_TO_CACHE = [
     '/scripts/handle_github_activity.js',
     '/scripts/Achievement.js',
     '/scripts/handle_achievements.js',
+    '/scripts/moment-2.24.0.min.js',
     // styles
     '/styles/general.css',
     '/styles/landing.css',
@@ -64,8 +65,8 @@ async function handleRequest(event) {
         if (urlsDelayedRefetches.includes(event.request.url)) {
             const date = new Date(result.headers.get('Date'));
 
-            // refresh cache every minutes
-            if (Date.now() > date.getTime() + 1000 * 60) {
+            // refresh cache every 5 minutes
+            if (Date.now() > date.getTime() + 1000 * 60 * 5) {
                 try {
                     const response = await fetch(event.request);
                     const newResponse = await addTimestamp(response);
