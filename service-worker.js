@@ -64,19 +64,27 @@ async function handleRequest(event) {
         if (urlsDelayedRefetches.includes(event.request.url)) {
             const date = new Date(result.headers.get('Date'));
 
-            // refresh cache every minute
+            // refresh cache every minutes
             if (Date.now() > date.getTime() + 1000 * 60) {
-                const response = await fetch(event.request);
-                const newResponse = await addTimestamp(response);
+                try {
+                    const response = await fetch(event.request);
+                    const newResponse = await addTimestamp(response);
 
-                cache.put(event.request.url, newResponse.clone());
-
-                return newResponse;
+                    if (newResponse.ok) {
+                        cache.put(event.request.url, newResponse.clone());
+                        return newResponse;
+                    }
+                } catch (error) {}
             }
         } else {
             // refresh cache
-            const response = await fetch(event.request);
-            cache.put(event.request.url, response.clone());
+            try {
+                const response = await fetch(event.request);
+
+                if (response.ok) {
+                    cache.put(event.request.url, response.clone());
+                }
+            } catch (error) {}
         }
 
         return result;
@@ -84,12 +92,18 @@ async function handleRequest(event) {
 
     console.log(`Request '${event.request.url}' not found in the cache.`);
 
-    const response = await fetch(event.request);
-    const newResponse = await addTimestamp(response.clone());
+    try {
+        const response = await fetch(event.request);
+        const newResponse = await addTimestamp(response.clone());
 
-    cache.put(event.request.url, newResponse.clone());
+        if (newResponse.ok) {
+            cache.put(event.request.url, newResponse.clone());
+        }
 
-    return newResponse;
+        return newResponse;
+    } catch (error) {
+        return null;
+    }
 }
 
 self.addEventListener('install', function(event) {
