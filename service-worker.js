@@ -1,4 +1,5 @@
 const CACHE_NAME = 'yvesgurcan.com';
+const GITHUB_API = 'https://api.github.com';
 
 const URLS_TO_CACHE = [
     '/',
@@ -32,10 +33,14 @@ const URLS_TO_CACHE = [
     '/styles/faq.css'
 ];
 
-const GITHUB_USERNAME = 'yvesgurcan';
-const USER_PUBLIC_ACTIVITY_ENDPOINT = `https://api.github.com/users/${GITHUB_USERNAME}/events/public`;
+const URLS_DELAYED_REFETCHES = [GITHUB_API];
 
-const URLS_DELAYED_REFETCHES = [USER_PUBLIC_ACTIVITY_ENDPOINT];
+function isDelayedUrl(targetUrl) {
+    const isDelayed = URLS_DELAYED_REFETCHES.some(
+        url => targetUrl.indexOf(url) > -1
+    );
+    return isDelayed;
+}
 
 // we nuke the response/headers to get the current date in there
 async function addTimestamp(response) {
@@ -44,9 +49,27 @@ async function addTimestamp(response) {
     return newResponse;
 }
 
-async function addToCache() {
+async function addAllToCache() {
     const cache = await caches.open(CACHE_NAME);
     return cache.addAll(URLS_TO_CACHE);
+}
+
+async function putInCache(event, cache, transform = true) {
+    const response = await fetch(event.request);
+    const newResponse = transform ? await addTimestamp(response) : response;
+
+    if (newResponse.ok) {
+        if (event.request.url.indexOf(GITHUB_API) > -1) {
+            // do not cache requests that go beyond the GitHub API rate limit
+            // if () {
+            cache.put(event.request.url, newResponse.clone());
+            return newResponse;
+            // }
+        } else {
+            cache.put(event.request.url, newResponse.clone());
+            return newResponse;
+        }
+    }
 }
 
 async function handleRequest(event) {
@@ -54,37 +77,19 @@ async function handleRequest(event) {
     const result = await cache.match(event.request.url);
 
     if (result) {
-        const urlsDelayedRefetches = URLS_DELAYED_REFETCHES.map(url => {
-            return [
-                url,
-                `http://localhost:8080${url}`,
-                `https://v4.yvesgurcan.com/${url}`
-            ];
-        }).flat();
-
-        if (urlsDelayedRefetches.includes(event.request.url)) {
+        if (isDelayedUrl(event.request.url)) {
             const date = new Date(result.headers.get('Date'));
 
             // refresh cache every 5 minutes
             if (Date.now() > date.getTime() + 1000 * 60 * 5) {
                 try {
-                    const response = await fetch(event.request);
-                    const newResponse = await addTimestamp(response);
-
-                    if (newResponse.ok) {
-                        cache.put(event.request.url, newResponse.clone());
-                        return newResponse;
-                    }
+                    return await putInCache(event, cache);
                 } catch (error) {}
             }
         } else {
-            // refresh cache
+            // refresh cache immediately
             try {
-                const response = await fetch(event.request);
-
-                if (response.ok) {
-                    cache.put(event.request.url, response.clone());
-                }
+                putInCache(event, cache, false);
             } catch (error) {}
         }
 
@@ -94,14 +99,7 @@ async function handleRequest(event) {
     console.log(`Request '${event.request.url}' not found in the cache.`);
 
     try {
-        const response = await fetch(event.request);
-        const newResponse = await addTimestamp(response.clone());
-
-        if (newResponse.ok) {
-            cache.put(event.request.url, newResponse.clone());
-        }
-
-        return newResponse;
+        return await putInCache(event, cache);
     } catch (error) {
         return null;
     }
@@ -109,7 +107,7 @@ async function handleRequest(event) {
 
 self.addEventListener('install', function(event) {
     self.skipWaiting();
-    event.waitUntil(addToCache());
+    event.waitUntil(addAllToCache());
 });
 
 self.addEventListener('fetch', function(event) {
