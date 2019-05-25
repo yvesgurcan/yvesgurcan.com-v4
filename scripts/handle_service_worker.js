@@ -20,6 +20,10 @@ const listenToServiceWorkerUpdates = registration => {
         return;
     }
 
+    if (!navigator.onLine) {
+        return;
+    }
+
     window.addEventListener('load', () => {
         navigator.serviceWorker
             .register('/service-worker.js')
