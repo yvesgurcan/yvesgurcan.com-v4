@@ -19,27 +19,6 @@ class GitHubEvent {
         return moment(createdAt).fromNow();
     }
 
-    getIcon() {
-        let path = GITHUB_ICON_PATH_PREFIX;
-        const { type, payload = {} } = this.data;
-        const { action, ref_type } = payload;
-        switch (type) {
-            default: {
-                return:
-            }
-            case 'ForkEvent': {
-                path += 'repo-forked';
-                return;
-            }
-            case 'PushEvent': {
-                path += 'repo-push';
-                return;
-            }
-        }
-
-        return `${path}.svg`;
-    }
-
     getName() {
         const { type, payload = {} } = this.data;
         const { action, ref_type, pages, commits } = payload;
@@ -102,13 +81,35 @@ class GitHubEvent {
                 return `${action} a repository`;
             }
             case 'StarEvent': {
-                const starAction = action === 'created' ? 'starred' : 'unstarred';
+                const starAction =
+                    action === 'created' ? 'starred' : 'unstarred';
                 return `${starAction} a repository`;
             }
             case 'WatchEvent': {
                 return `${action} watching a repository`;
             }
         }
+    }
+
+    getIcon() {
+        let path = GITHUB_ICON_PATH_PREFIX;
+        const { type, payload = {} } = this.data;
+        const { action, ref_type } = payload;
+        switch (type) {
+            default: {
+                return;
+            }
+            case 'ForkEvent': {
+                path += 'repo-forked';
+                return;
+            }
+            case 'PushEvent': {
+                path += 'repo-push';
+                return;
+            }
+        }
+
+        return `${path}.svg`;
     }
 
     async getRepoUrl() {
