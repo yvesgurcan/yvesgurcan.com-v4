@@ -1,3 +1,5 @@
+const GITHUB_ICON_PATH_PREFIX = '/assets/github';
+
 class GitHubEvent {
     constructor(event, index) {
         this.data = event;
@@ -5,6 +7,7 @@ class GitHubEvent {
 
         this.id = event.id;
         this.title = `${this.getName()}.`;
+        this.icon = this.getIcon();
         this.repo = {
             name: event.repo.name,
             apiUrl: event.repo.url
@@ -14,6 +17,26 @@ class GitHubEvent {
     get timeFromNow() {
         const createdAt = this.data.created_at;
         return moment(createdAt).fromNow();
+    }
+
+    getIcon() {
+        let path = GITHUB_ICON_PATH_PREFIX;
+        const { type, action, ref_type } = this.data.payload;
+        switch (type) {
+            default: {
+                return:
+            }
+            case 'ForkEvent': {
+                path += 'repo-forked';
+                return;
+            }
+            case 'PushEvent': {
+                path += 'repo-push';
+                return;
+            }
+        }
+
+        return `${path}.svg`;
     }
 
     getName() {
