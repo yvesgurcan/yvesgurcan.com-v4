@@ -21,7 +21,8 @@ class GitHubEvent {
 
     getIcon() {
         let path = GITHUB_ICON_PATH_PREFIX;
-        const { type, action, ref_type } = this.data.payload;
+        const { type, payload = {} } = this.data;
+        const { action, ref_type } = payload;
         switch (type) {
             default: {
                 return:
@@ -40,7 +41,8 @@ class GitHubEvent {
     }
 
     getName() {
-        const { type, action, ref_type, pages, commits } = this.data.payload;
+        const { type, payload = {} } = this.data;
+        const { action, ref_type, pages, commits } = payload;
         switch (type) {
             default: {
                 return '';
