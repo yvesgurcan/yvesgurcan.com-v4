@@ -3,6 +3,8 @@
     display: flex;
     flex-direction: column;
     margin: auto;
+    padding-top: 100px;
+    padding-bottom: 100px;
 }
 
 #activity h3 {
