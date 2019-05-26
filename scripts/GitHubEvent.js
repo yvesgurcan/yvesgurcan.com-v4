@@ -21,7 +21,8 @@ class GitHubEvent {
 
     getName() {
         const { type, payload = {} } = this.data;
-        const { action, ref_type, pages, commits } = payload;
+        const { action, ref_type, pages, commits, issue = {} } = payload;
+        const { pull_request } = issue;
         switch (type) {
             default: {
                 return '';
@@ -42,48 +43,33 @@ class GitHubEvent {
                 return `${pages[0].action} a wiki page`;
             }
             case 'IssueCommentEvent': {
+                if (pull_request) {
+                    return 'commented on a pull request';
+                }
+
                 // 'edited' and 'deleted' are not public
                 return 'commented on an issue';
             }
             case 'IssuesEvent': {
                 return `${action} an issue`;
             }
-            // not tested below
-            case 'LabelEvent': {
-                return `${action} an issue label`;
-            }
-            case 'MilestoneEvent': {
-                return `${action} a milestone`;
-            }
-            case 'ProjectCardEvent': {
-                return `${action} a project card`;
-            }
-            case 'ProjectColumnEvent': {
-                return `${action} a project column`;
-            }
             case 'PullRequestEvent': {
-                // TODO: there are some actions whose wording does not work very well like that
+                // TODO: there might be some other public actions whose wording does not work very well like that
                 return `${action} a pull request`;
             }
             case 'PullRequestReviewEvent': {
+                // need to be tested
                 return `${action} a review on a pull request`;
             }
             case 'PullRequestReviewCommentEvent': {
-                return `${action} a comment on a pull request`;
+                // 'edited' and 'deleted' are not public
+                return `commented on a pull request`;
             }
             case 'PushEvent': {
                 const commitCount = commits.length;
                 return `pushed ${commitCount} commit${
                     commitCount > 1 ? 's' : ''
                 }`;
-            }
-            case 'RepositoryEvent': {
-                return `${action} a repository`;
-            }
-            case 'StarEvent': {
-                const starAction =
-                    action === 'created' ? 'starred' : 'unstarred';
-                return `${starAction} a repository`;
             }
             case 'WatchEvent': {
                 return `${action} watching a repository`;
@@ -99,12 +85,76 @@ class GitHubEvent {
             default: {
                 return '';
             }
+            case 'CreateEvent': {
+                switch (ref_type) {
+                    default: {
+                        return '';
+                    }
+                    case 'branch': {
+                        path += 'git-branch';
+                        break;
+                    }
+                    case 'repository': {
+                        path += 'repo';
+                        break;
+                    }
+                }
+                break;
+            }
+            case 'DeleteEvent': {
+                path += 'trashcan';
+                break;
+            }
+            case 'CommitCommentEvent':
+            case 'IssueCommentEvent':
+            case 'PullRequestReviewCommentEvent': {
+                path += 'comment';
+                break;
+            }
             case 'ForkEvent': {
                 path += 'repo-forked';
                 break;
             }
+            case 'GollumEvent': {
+                path += 'book';
+                break;
+            }
+            case 'IssuesEvent': {
+                switch (action) {
+                    default: {
+                        path += 'issue-opened';
+                        break;
+                    }
+                    case 'reopened': {
+                        path += 'issue-reopened';
+                        break;
+                    }
+                    case 'closed': {
+                        path += 'issue-closed';
+                        break;
+                    }
+                }
+                break;
+            }
+            case 'PullRequestEvent': {
+                switch (action) {
+                    default: {
+                        path += 'git-pull-request';
+                        break;
+                    }
+                    case 'closed': {
+                        path += 'circle-slash';
+                        break;
+                    }
+                }
+                break;
+            }
             case 'PushEvent': {
                 path += 'repo-push';
+                break;
+            }
+            case 'WatchEvent': {
+                path += 'eye';
                 break;
             }
         }
