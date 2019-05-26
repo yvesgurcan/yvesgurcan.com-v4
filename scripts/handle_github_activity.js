@@ -1,11 +1,41 @@
-const handleRepoUrl = async event => {
-    const repoUrl = await event.getRepoUrl();
-    const repoElem = document.getElementById(`event-repo${event.id}`);
-    if (repoElem) {
-        repoElem.setAttribute('href', repoUrl);
-        repoElem.setAttribute('target', '_blank');
-        repoElem.setAttribute('rel', 'noopener');
+const githubReposInEvents = [];
+
+const addDeferredRepoRequest = (url, eventId) => {
+    const deferredRequestIndex = githubReposInEvents.findIndex(
+        repoEvents => repoEvents.url === url
+    );
+    if (deferredRequestIndex > -1) {
+        const deferredRequest = githubReposInEvents[deferredRequestIndex];
+        githubReposInEvents[deferredRequestIndex] = {
+            ...deferredRequest,
+            eventIds: [...deferredRequest.eventIds, eventId]
+        };
+        return;
     }
+
+    githubReposInEvents.push({ url, eventIds: [eventId] });
+};
+
+const handleRepoUrls = async () => {
+    githubReposInEvents.forEach(async repoEvents => {
+        console.log({ repoEvents });
+        const result = await fetch(repoEvents.url);
+        if (result) {
+            const data = await result.json();
+            if (data) {
+                repoEvents.eventIds.map(eventId => {
+                    const repoElem = document.getElementById(
+                        `event-repo${eventId}`
+                    );
+                    if (repoElem) {
+                        repoElem.setAttribute('href', data.html_url);
+                        repoElem.setAttribute('target', '_blank');
+                        repoElem.setAttribute('rel', 'noopener');
+                    }
+                });
+            }
+        }
+    });
 };
 
 (async function() {
@@ -42,7 +72,8 @@ const handleRepoUrl = async event => {
             eventRepo.innerHTML = event.repo.name;
             eventDetails.append(eventRepo);
 
-            handleRepoUrl(event);
+            // group requests for repo details to avoid sending duplicate requests concurrently
+            addDeferredRepoRequest(event.repo.apiUrl, event.id);
 
             const eventTime = document.createElement('div');
             eventTime.classList = 'event-time';
@@ -56,6 +87,9 @@ const handleRepoUrl = async event => {
 
             eventList.append(eventItem);
         });
+
+        // send all requests for repo details
+        handleRepoUrls();
 
         console.log({ publicActivity });
     } else {
