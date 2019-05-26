@@ -1,4 +1,4 @@
-const GITHUB_ICON_PATH_PREFIX = '/assets/github';
+const GITHUB_ICON_PATH_PREFIX = '/assets/github/';
 
 class GitHubEvent {
     constructor(event, index) {
