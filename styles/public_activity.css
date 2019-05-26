@@ -30,7 +30,20 @@
     flex-shrink: 0;
 }
 
-.event > :nth-child(1) {
+.event-inner {
+    display: flex;
+}
+
+.event-icon {
+    flex-shrink: 0;
+    margin-right: 10px;
+}
+
+.event-icon-inner {
+    width: 30px;
+}
+
+.event-details {
     display: flex;
     flex-direction: column;
     justify-content: space-between;

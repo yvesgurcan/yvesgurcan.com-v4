@@ -18,7 +18,6 @@ const addDeferredRepoRequest = (url, eventId) => {
 
 const handleRepoUrls = async () => {
     githubReposInEvents.forEach(async repoEvents => {
-        console.log({ repoEvents });
         const result = await fetch(repoEvents.url);
         if (result) {
             const data = await result.json();
@@ -59,8 +58,12 @@ const handleRepoUrls = async () => {
         publicActivity.forEach((rawEvent, index) => {
             const event = new GitHubEvent(rawEvent, index);
 
+            // event details
             const eventDetails = document.createElement('div');
-            eventDetails.id = `event${event.id}`;
+            eventDetails.classList = 'event-details';
+
+            const eventItemInner = document.createElement('div');
+            eventItemInner.classList = 'event-inner';
 
             const eventName = document.createElement('div');
             eventName.classList = 'event-title';
@@ -72,20 +75,36 @@ const handleRepoUrls = async () => {
             eventRepo.innerHTML = event.repo.name;
             eventDetails.append(eventRepo);
 
-            // group requests for repo details to avoid sending duplicate requests concurrently
-            addDeferredRepoRequest(event.repo.apiUrl, event.id);
-
             const eventTime = document.createElement('div');
             eventTime.classList = 'event-time';
             eventTime.innerHTML = event.timeFromNow;
             eventDetails.append(eventTime);
 
+            // event image
+            if (event.icon) {
+                const eventIcon = document.createElement('div');
+                eventIcon.classList = 'event-icon';
+
+                const eventIconInner = document.createElement('img');
+                eventIconInner.classList = 'event-icon-inner';
+                eventIconInner.setAttribute('src', event.icon);
+
+                eventIcon.append(eventIconInner);
+                eventItemInner.append(eventIcon);
+            }
+
+            // group children elements
             const eventItem = document.createElement('li');
             eventItem.className = EVENT_CLASS;
+            eventItem.id = `event${event.id}`;
 
-            eventItem.append(eventDetails);
+            eventItemInner.append(eventDetails);
+            eventItem.append(eventItemInner);
 
             eventList.append(eventItem);
+
+            // group requests for repo details to avoid sending duplicate requests concurrently
+            addDeferredRepoRequest(event.repo.apiUrl, event.id);
         });
 
         // send all requests for repo details
