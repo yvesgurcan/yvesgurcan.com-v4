@@ -97,32 +97,18 @@ class GitHubEvent {
         const { action, ref_type } = payload;
         switch (type) {
             default: {
-                return;
+                return '';
             }
             case 'ForkEvent': {
                 path += 'repo-forked';
-                return;
+                break;
             }
             case 'PushEvent': {
                 path += 'repo-push';
-                return;
+                break;
             }
         }
 
         return `${path}.svg`;
-    }
-
-    async getRepoUrl() {
-        const result = await fetch(this.repo.apiUrl);
-        if (result) {
-            const data = await result.json();
-            this.repo = {
-                ...this.repo,
-                url: data.html_url
-            };
-            return data.html_url;
-        }
-
-        return '';
     }
 }
