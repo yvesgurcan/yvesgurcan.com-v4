@@ -82,6 +82,7 @@ async function handleRequest(event) {
 
             // refresh cache every 5 minutes
             if (Date.now() > date.getTime() + 1000 * 60 * 5) {
+                console.log('Cache expired', event.request.url);
                 try {
                     return await putInCache(event, cache);
                 } catch (error) {}
@@ -99,9 +100,9 @@ async function handleRequest(event) {
     console.log(`Request '${event.request.url}' not found in the cache.`);
 
     try {
-        return await putInCache(event, cache);
+        return await putInCache(event, cache, false);
     } catch (error) {
-        return null;
+        return new Response();
     }
 }
 
