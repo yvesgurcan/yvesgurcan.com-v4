@@ -18,21 +18,25 @@ const addDeferredRepoRequest = (url, eventId) => {
 
 const handleRepoUrls = async () => {
     githubReposInEvents.forEach(async repoEvents => {
-        const result = await fetch(repoEvents.url);
-        if (result) {
-            const data = await result.json();
-            if (data) {
-                repoEvents.eventIds.map(eventId => {
-                    const repoElem = document.getElementById(
-                        `event-repo${eventId}`
-                    );
-                    if (repoElem) {
-                        repoElem.setAttribute('href', data.html_url);
-                        repoElem.setAttribute('target', '_blank');
-                        repoElem.setAttribute('rel', 'noopener');
-                    }
-                });
+        try {
+            const result = await fetch(repoEvents.url);
+            if (result) {
+                const data = await result.json();
+                if (data && data.html_url) {
+                    repoEvents.eventIds.map(eventId => {
+                        const repoElem = document.getElementById(
+                            `event-repo${eventId}`
+                        );
+                        if (repoElem) {
+                            repoElem.setAttribute('href', data.html_url);
+                            repoElem.setAttribute('target', '_blank');
+                            repoElem.setAttribute('rel', 'noopener');
+                        }
+                    });
+                }
             }
+        } catch (error) {
+            console.error({ url: repoEvents.url, error });
         }
     });
 };
