@@ -57,9 +57,19 @@ const handleRepoUrls = async () => {
         if (publicActivityResponse.status !== 200) {
             return;
         }
+
         const publicActivity = await publicActivityResponse.json();
 
         publicActivity.forEach((rawEvent, index) => {
+            if (index === 0) {
+                const activityContainer = document.getElementById('activity');
+                if (activityContainer) {
+                    const activityTitle = document.createElement('h2');
+                    activityTitle.innerHTML = 'Public activity';
+                    activityContainer.prepend(activityTitle);
+                }
+            }
+
             const event = new GitHubEvent(rawEvent, index);
 
             // event details
