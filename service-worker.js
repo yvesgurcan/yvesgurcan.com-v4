@@ -37,7 +37,17 @@ const URLS_DELAYED_REFETCHES = [GITHUB_API];
 
 function isGitHubRateLimitedRequest(response) {
     // TODO: add more specific checks
-    return response.status === 403;
+    const limitReached = response.status === 403;
+
+    if (limitReached) {
+        console.warn(
+            `The limit of requests sent from this IP has been reached for the GitHub API (request: ${
+                response.url
+            })`
+        );
+    }
+
+    return limitReached;
 }
 
 function isDelayedUrl(targetUrl) {
