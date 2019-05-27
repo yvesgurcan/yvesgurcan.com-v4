@@ -1,41 +1,44 @@
 let activeElement = -1;
 let touchEnabled = false;
-let achievementDetails = null;
 
 class Achievement {
-  constructor(achievement, index) {
-    this.data = achievement;
-    this.index = index;
-  }
-
-  onMouseOver() {
-    if (touchEnabled) {
-      return;
+    constructor(achievement, index) {
+        this.data = achievement;
+        this.index = index;
     }
 
-    const achievementInfoElem = document.getElementById(
-      `achievement-info${this.index}`
-    );
-    achievementInfoElem.classList.remove("hidden");
-  }
+    onMouseOver() {
+        if (touchEnabled) {
+            return;
+        }
 
-  onMouseOut() {
-    if (touchEnabled) {
-      return;
+        const achievementInfoElem = document.getElementById(
+            `achievement-info${this.index}`
+        );
+        achievementInfoElem.classList.remove('hidden');
     }
 
-    const achievementInfoElem = document.getElementById(
-      `achievement-info${this.index}`
-    );
-    achievementInfoElem.classList.add("hidden");
-  }
+    onMouseOut() {
+        if (touchEnabled) {
+            return;
+        }
 
-  toggleInfo() {
-    const achievementInfoElem = document.getElementById(
-      `achievement-info${this.index}`
-    );
-    achievementInfoElem.classList.toggle("hidden");
+        const achievementInfoElem = document.getElementById(
+            `achievement-info${this.index}`
+        );
+        achievementInfoElem.classList.add('hidden');
+    }
 
-    activeElement = this.index;
-  }
+    toggleInfo() {
+        const achievementInfoElem = document.getElementById(
+            `achievement-info${this.index}`
+        );
+        if (achievementInfoElem.classList.contains('hidden')) {
+            achievementInfoElem.classList.add('hidden');
+        } else {
+            achievementInfoElem.classList.remove('hidden');
+        }
+
+        activeElement = this.index;
+    }
 }
