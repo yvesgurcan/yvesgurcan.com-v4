@@ -25,6 +25,14 @@ const disableTouch = () => {
 
     if (achievementList) {
         mostRecentAchievements.forEach((rawAchievement, index) => {
+            if (index === 0) {
+                const publicActivity = document.getElementById('achievements');
+                if (publicActivity) {
+                    const publicActivityInner = document.createElement('div');
+                    publicActivityInner.id = 'social-wall-inner';
+                }
+            }
+
             const achievement = new Achievement(rawAchievement, index);
             const achievementImage = document.createElement('img');
             achievementImage.onmouseover = () => achievement.onMouseOver();
