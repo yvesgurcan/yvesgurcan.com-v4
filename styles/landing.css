@@ -76,7 +76,7 @@ h1 :nth-child(3) {
     }
 }
 
-h2 {
+.tagline {
     text-align: center;
     padding-top: 60px;
     padding-bottom: 90px;

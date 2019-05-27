@@ -21,8 +21,16 @@ class GitHubEvent {
 
     getName() {
         const { type, payload = {} } = this.data;
-        const { action, ref_type, pages, commits, issue = {} } = payload;
-        const { pull_request } = issue;
+        const {
+            action,
+            ref_type,
+            pages,
+            commits,
+            issue = {},
+            pull_request = {}
+        } = payload;
+        const { pull_request: issue_pull_request } = issue;
+        const { merged_at } = pull_request;
         switch (type) {
             default: {
                 return '';
@@ -43,7 +51,7 @@ class GitHubEvent {
                 return `${pages[0].action} a wiki page`;
             }
             case 'IssueCommentEvent': {
-                if (pull_request) {
+                if (issue_pull_request) {
                     return 'commented on a pull request';
                 }
 
@@ -55,7 +63,9 @@ class GitHubEvent {
             }
             case 'PullRequestEvent': {
                 // TODO: there might be some other public actions whose wording does not work very well like that
-                return `${action} a pull request`;
+                const prAction = merged_at ? 'merged' : action;
+
+                return `${prAction} a pull request`;
             }
             case 'PullRequestReviewEvent': {
                 // need to be tested
@@ -80,7 +90,8 @@ class GitHubEvent {
     getIcon() {
         let path = GITHUB_ICON_PATH_PREFIX;
         const { type, payload = {} } = this.data;
-        const { action, ref_type } = payload;
+        const { action, ref_type, pull_request = {} } = payload;
+        const { merged_at } = pull_request;
         switch (type) {
             default: {
                 return '';
@@ -143,6 +154,11 @@ class GitHubEvent {
                         break;
                     }
                     case 'closed': {
+                        if (merged_at) {
+                            path += 'git-merge';
+                            break;
+                        }
+
                         path += 'circle-slash';
                         break;
                     }

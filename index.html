@@ -19,7 +19,7 @@
     <body>
         <section>
             <div>
-                <div id="landing">
+                <div id="landing" class="view">
                     <h1>
                         <span>Hello</span>
                         <span>my name is</span>
@@ -27,96 +27,93 @@
                             <span class="name">Yves Gurcan</span>
                         </span>
                     </h1>
-                    <h2>
+                    <p class="tagline">
                         I'm a full stack developer with
                         <span id="experience-count">many</span>
                         years of professional experience.
-                    </h2>
+                    </p>
                     <div id="online-presence">
                         <ul class="image-list">
                             <li>
                                 <a href="https://www.linkedin.com/in/yvesgurcan/">
-                                    <img id="linkedin" alt="LinkedIn profile" title="LinkedIn profile" src="assets/linkedin.png">
+                                    <img height="40" id="linkedin" alt="LinkedIn profile" title="LinkedIn profile" src="assets/linkedin.png">
                                 </a>
                             </li>
                             <li>
                                 <a href="https://github.com/yvesgurcan">
-                                    <img id="github" alt="GitHub profile" title="GitHub profile" src="assets/github.png">
+                                    <img height="40" id="github" alt="GitHub profile" title="GitHub profile" src="assets/github.png">
                                 </a>
                             </li>
                             <li>
                                 <a href="https://twitter.com/yvesgurcan">
-                                    <img id="twitter" alt="Twitter profile" title="Twitter profile" src="assets/twitter.png">
+                                    <img height="40" id="twitter" alt="Twitter profile" title="Twitter profile" src="assets/twitter.png">
                                 </a>
                             </li>
                             <li>
                                 <a href="https://medium.com/@yvesgurcan">
-                                    <img id="medium" alt="Medium profile" title="Medium profile" src="assets/medium.png">
+                                    <img height="40" id="medium" alt="Medium profile" title="Medium profile" src="assets/medium.png">
                                 </a>
                             </li>
                         </ul>
                     </div>
                 </div>
-                <div id="activity">
-                    <h3>
-                        Public activity
-                    </h3>
+                <div id="activity" class="view">
                     <ul id="social-wall">
                     </ul>
                 </div>
-                <div id="achievements">
-                    <h3>
+                <div id="achievements" class="view">
+                    <h2>
                         Latest achievements
-                    </h3>
+                    </h2>
                     <ul id="latest-achievements" class="image-list">
                     </ul>
                 </div>
-                <div id="faq">
+                <div id="faq" class="view">
                     <div id="faq-inner">
-                        <h4>
+                        <h2>
                             Frequently Asked Questions
-                        </h4>
+                        </h2>
                         <ul>
                             <li>
-                                <h5 id="yves">How do you say your first name?</h5>
+                                <h3 id="yves">How do you say your first name?</h3>
                                 <p>My name sounds just like the female name "Eve." The <i>s</i> is silent. It's a French name.</p>
                             </li>
                             <li>
-                                <h5 id="france">Where do you come from?</h5>
+                                <h3 id="france">Where do you come from?</h3>
                                 <p>I was born and raised in France. I've lived on the West Coast since 2014.</p>
                             </li>
                             <li>
-                                <h5 id="visa">Can you work in the U.S.?</h5>
+                                <h3 id="visa">Can you work in the U.S.?</h3>
                                 <p>Yes! I am a permanent resident. I don't need a work visa or anything like that to be employed. My status is pretty much the same as a U.S. citizen's.</p>
                             </li>
                             <li>
-                                <h5 id="us">What brought you here?</h5>
+                                <h3 id="us">What brought you here?</h3>
                                 <p>My wife. She is from Oregon. We met in San Francisco.</p>
                             </li>
                             <li>
-                                <h5 id="job">What do you do at your current job?</h5>
+                                <h3 id="job">What do you do at your current job?</h3>
                                 <p>I'm part of the Content Experience Team. I work on all UIs and services involved in the production and distribution of video content.</p>
                             </li>
                             <li>
-                                <h5 id="tech">What technology are you familiar with?</h5>
+                                <h3 id="tech">What technology are you familiar with?</h3>
                                 <p>In addition to strong HTML and CSS fundamentals, I am an expert with all things JavaScript (React, Node, MongoDB) and AWS (Lambda, DynamoDB, API Gateway, ECS, and so forth).</p>
                                 <p>I also have experience with mobile app development: React Native, Swift, Objective-C, and Java for Android.</p>
                                 <p>Moreover, I know my way around SQL, .NET, and C#.</p>
                             </li>
                             <li id="stack">
-                                <h5>Do you prefer front-end or back-end?</h5>
+                                <h3>Do you prefer front-end or back-end?</h3>
                                 <p>I very much enjoy designing and styling beautiful UIs. But I also like building APIs from the ground up.</p>
                             </li>
                             <li id="lpp">
-                                <h5>What is <i>Le Petit Pain</i>?</h5>
+                                <h3>What is <i>Le Petit Pain</i>?</h3>
                                 <p>That's a bakery business I started in 2015 in Eugene, OR. I don't bake frequently anymore but feel free to message me if you would like to purchase French pastries for a special occasion.</p>
                             </li>
                             <li id="location">
-                                <h5>Are you willing to move for a job?</h5>
+                                <h3>Are you willing to move for a job?</h3>
                                 <p>My wife and I like Eugene but we are definitively open to positions in other locations; even fully remote positions!</p>
                             </li>
                             <li id="contracting">
-                                <h5>Are you open to contract-for-hire offers?</h5>
+                                <h3>Are you open to contract-for-hire offers?</h3>
                                 <p>No. I don't like the idea of being hired for a limited amount of time with no guarantee that I will be employed by the company afterwards.</p>
                             </li>
                         </ul>
@@ -129,7 +126,7 @@
         <script type="text/javascript" src="scripts/professional_experience.js"></script>
 
         <script type="text/javascript" src="scripts/GitHubEvent.js"></script>
-        <script type="text/javascript" src="scripts/handle_github_activity.js"></script>
+        <script type="text/javascript" src="scripts/handle_github_events.js"></script>
 
         <script type="text/javascript" src="data/achievements.js"></script>
         <script type="text/javascript" src="scripts/Achievement.js"></script>

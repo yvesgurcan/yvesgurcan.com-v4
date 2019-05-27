@@ -9,9 +9,6 @@ body,
 h1,
 h2,
 h3,
-h4,
-h5,
-h6,
 ul {
     font-size: 16px;
     margin: 0;
@@ -51,4 +48,9 @@ p {
 a {
     color: rgb(200, 200, 200);
     text-decoration: none;
+}
+
+.view {
+    padding-top: 30px;
+    padding-bottom: 30px;
 }

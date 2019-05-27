@@ -1,18 +1,17 @@
 #activity {
-    max-width: 960px;
+    max-width: 1290px;
     display: flex;
     flex-direction: column;
     margin: auto;
+}
+
+#activity h2 {
     padding-top: 100px;
-    padding-bottom: 100px;
+    padding-left: 15px;
 }
 
-#activity h3 {
-    padding-left: 10px;
-}
-
-@media (max-width: 999px) {
-    #activity h3 {
+@media (max-width: 1329px) {
+    #activity h2 {
         text-align: center;
     }
 }
@@ -23,11 +22,15 @@
     justify-content: center;
 }
 
+#social-wall-inner {
+    padding-bottom: 100px;
+}
+
 .event {
     background: grey;
-    padding: 10px;
-    margin: 10px;
-    width: 300px;
+    padding: 20px;
+    margin: 15px;
+    width: 400px;
     box-sizing: border-box;
     flex-shrink: 0;
 }
