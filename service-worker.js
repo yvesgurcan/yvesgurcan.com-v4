@@ -35,6 +35,11 @@ const URLS_TO_CACHE = [
 
 const URLS_DELAYED_REFETCHES = [GITHUB_API];
 
+function isGitHubRateLimitedRequest(response) {
+    // TODO: add more specific checks
+    return response.status === 403;
+}
+
 function isDelayedUrl(targetUrl) {
     const isDelayed = URLS_DELAYED_REFETCHES.some(
         url => targetUrl.indexOf(url) > -1
@@ -54,8 +59,12 @@ async function addAllToCache() {
     return cache.addAll(URLS_TO_CACHE);
 }
 
-async function putInCache(event, cache, transform = true) {
+async function putInCache(event, cache, cachedResponse, transform = true) {
     const response = await fetch(event.request);
+    if (isGitHubRateLimitedRequest(response)) {
+        return cachedResponse;
+    }
+
     const newResponse = transform ? await addTimestamp(response) : response;
 
     if (newResponse.ok) {
@@ -84,13 +93,13 @@ async function handleRequest(event) {
             if (Date.now() > date.getTime() + 1000 * 60 * 5) {
                 console.log('Cache expired', event.request.url);
                 try {
-                    return await putInCache(event, cache);
+                    return await putInCache(event, cache, result);
                 } catch (error) {}
             }
         } else {
             // refresh cache immediately
             try {
-                putInCache(event, cache, false);
+                putInCache(event, cache, result, false);
             } catch (error) {}
         }
 
@@ -100,7 +109,7 @@ async function handleRequest(event) {
     console.log(`Request '${event.request.url}' not found in the cache.`);
 
     try {
-        return await putInCache(event, cache, false);
+        return await putInCache(event, cache, result, false);
     } catch (error) {
         return new Response();
     }
