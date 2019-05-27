@@ -21,7 +21,7 @@ const URLS_TO_CACHE = [
     '/scripts/handle_service_worker.js',
     '/scripts/professional_experience.js',
     '/scripts/GitHubEvent.js',
-    '/scripts/handle_github_activity.js',
+    '/scripts/handle_github_events.js',
     '/scripts/Achievement.js',
     '/scripts/handle_achievements.js',
     '/scripts/moment-2.24.0.min.js',
