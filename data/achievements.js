@@ -2,7 +2,7 @@ const achievements = [
   {
     name: 'The legend',
     description : 'Learn the difference between CNAME and Apex records.',
-    date: 2019-05-27,
+    date: '2019-05-27',
     tags: 'learn, back end',
   },
   {
