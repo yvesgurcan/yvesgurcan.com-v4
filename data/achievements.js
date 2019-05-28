@@ -1,5 +1,11 @@
 const achievements = [
   {
+    name: 'The legend',
+    description : 'Learn the difference between CNAME and Apex records.',
+    date: 2019-05-27,
+    tags: 'learn, back end',
+  },
+  {
     name: "More than just an upgrade",
     description: "Migrate a project from Webpack 3 to Webpack 4.",
     date: "2019-05-01",
