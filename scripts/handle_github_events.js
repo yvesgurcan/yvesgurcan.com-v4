@@ -1,9 +1,17 @@
 const githubReposInEvents = [];
+const githubEventsWithRepoLinks = {};
 
-const addDeferredRepoRequest = (url, eventId) => {
+const addDeferredRepoRequest = event => {
+    const { repo = {}, id: eventId, linkIsSameAsRepoUrl } = event;
+    const { apiUrl: url } = repo;
     const deferredRequestIndex = githubReposInEvents.findIndex(
         repoEvents => repoEvents.url === url
     );
+
+    if (linkIsSameAsRepoUrl) {
+        githubEventsWithRepoLinks[eventId] = linkIsSameAsRepoUrl;
+    }
+
     if (deferredRequestIndex > -1) {
         const deferredRequest = githubReposInEvents[deferredRequestIndex];
         githubReposInEvents[deferredRequestIndex] = {
@@ -31,6 +39,26 @@ const handleRepoUrls = async () => {
                             repoElem.setAttribute('href', data.html_url);
                             repoElem.setAttribute('target', '_blank');
                             repoElem.setAttribute('rel', 'noopener');
+                        }
+
+                        const eventLink = githubEventsWithRepoLinks[eventId];
+                        if (eventLink) {
+                            const titleElem = document.getElementById(
+                                `event-title${eventId}`
+                            );
+
+                            if (titleElem) {
+                                let url = data.html_url;
+                                if (eventLink.indexOf('https') === 0) {
+                                    url = eventLink;
+                                } else if (eventLink !== true) {
+                                    url += eventLink;
+                                }
+
+                                titleElem.setAttribute('href', url);
+                                titleElem.setAttribute('target', '_blank');
+                                titleElem.setAttribute('rel', 'noopener');
+                            }
                         }
                     });
                 }
@@ -79,13 +107,22 @@ const handleRepoUrls = async () => {
             const eventItemInner = document.createElement('div');
             eventItemInner.classList = 'event-inner';
 
-            const eventName = document.createElement('div');
+            let eventName = document.createElement('a');
+
+            if (event.link) {
+                eventName.setAttribute('href', event.link);
+                eventName.setAttribute('target', '_blank');
+                eventName.setAttribute('rel', 'noopener');
+            }
+
+            eventName.id = `event-title${event.id}`;
             eventName.classList = 'event-title';
             eventName.innerHTML = event.title;
             eventDetails.append(eventName);
 
             const eventRepo = document.createElement('a');
             eventRepo.id = `event-repo${event.id}`;
+            eventRepo.classList = 'event-repo';
             eventRepo.innerHTML = event.repo.name;
             eventDetails.append(eventRepo);
 
@@ -118,7 +155,7 @@ const handleRepoUrls = async () => {
             eventList.append(eventItem);
 
             // group requests for repo details to avoid sending duplicate requests concurrently
-            addDeferredRepoRequest(event.repo.apiUrl, event.id);
+            addDeferredRepoRequest(event);
         });
 
         // send all requests for repo details

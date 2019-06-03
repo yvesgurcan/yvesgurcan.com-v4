@@ -8,6 +8,7 @@ class GitHubEvent {
         this.id = event.id;
         this.title = `${this.getName()}.`;
         this.icon = this.getIcon();
+        this.link = this.getLink();
         this.repo = {
             name: event.repo.name,
             apiUrl: event.repo.url
@@ -176,5 +177,64 @@ class GitHubEvent {
         }
 
         return `${path}.svg`;
+    }
+
+    getLink() {
+        const { type, payload = {} } = this.data;
+        const {
+            action,
+            ref_type,
+            pull_request = {},
+            issue = {},
+            comment = {}
+        } = payload;
+        const { html_url: prUrl } = pull_request;
+        const { html_url: issueUrl } = issue;
+        const { html_url: commentUrl } = comment;
+        switch (type) {
+            default: {
+                return '';
+            }
+            case 'IssueCommentEvent': {
+                return commentUrl;
+            }
+            case 'IssuesEvent': {
+                return issueUrl;
+            }
+            case 'PullRequestEvent': {
+                return prUrl;
+            }
+        }
+    }
+
+    get linkIsSameAsRepoUrl() {
+        const { type, payload = {} } = this.data;
+        const { ref_type, ref, forkee = {} } = payload;
+        const { html_url } = forkee;
+
+        switch (type) {
+            default: {
+                return false;
+            }
+            case 'CreateEvent': {
+                switch (ref_type) {
+                    default: {
+                        return false;
+                    }
+                    case 'branch': {
+                        return `/tree/${ref}`;
+                    }
+                    case 'repository': {
+                        return true;
+                    }
+                }
+            }
+            case 'ForkEvent': {
+                return html_url;
+            }
+            case 'WatchEvent': {
+                return true;
+            }
+        }
     }
 }

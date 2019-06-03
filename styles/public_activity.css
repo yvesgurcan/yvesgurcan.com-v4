@@ -59,6 +59,10 @@
     text-transform: uppercase;
 }
 
+a.event-title {
+    color: unset;
+}
+
 .event-time {
     font-style: italic;
     font-size: 14px;
