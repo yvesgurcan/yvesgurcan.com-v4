@@ -35,6 +35,12 @@ const URLS_TO_CACHE = [
 
 const URLS_DELAYED_REFETCHES = [GITHUB_API];
 
+const URLS_NOT_CACHED = [
+    'https://settings.crisp.chat/',
+    'https://client.crisp.chat/',
+    'https://image.crisp.chat/'
+];
+
 function isGitHubRateLimitedRequest(response) {
     // TODO: add more specific checks
     const limitReached = response.status === 403;
@@ -92,6 +98,15 @@ async function putInCache(event, cache, cachedResponse, transform = true) {
 }
 
 async function handleRequest(event) {
+    const shouldNotCache = URLS_NOT_CACHED.some(
+        url => event.request.url.indexOf(url) > -1
+    );
+
+    if (shouldNotCache) {
+        console.log(event.request.url, 'oi');
+        return await fetch(event.request.url, { mode: 'no-cors' });
+    }
+
     const cache = await caches.open(CACHE_NAME);
     const result = await cache.match(event.request.url);
 
